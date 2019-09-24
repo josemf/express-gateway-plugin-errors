@@ -1,7 +1,6 @@
 const axios = require('axios');
 const _ = require("lodash");
 
-
 const OutputJsonSender = require('./output_json_sender');
 
 module.exports = {
