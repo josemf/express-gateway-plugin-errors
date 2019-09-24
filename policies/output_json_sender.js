@@ -199,3 +199,5 @@ class OutputJsonSender {
         return JSON.stringify(data);
     }
 }
+
+module.exports = OutputJsonSender;
