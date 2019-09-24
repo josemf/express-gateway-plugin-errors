@@ -1,6 +1,3 @@
-const axios = require('axios');
-const _ = require("lodash");
-
 const OutputJsonSender = require('./output_json_sender');
 
 module.exports = {
@@ -17,7 +14,7 @@ module.exports = {
 
             defaults: {
                 type: "object",
-                default: { status: "NOK", code: "server_error", message: "Server Error" }
+                default: { status: "NOK", message: "Server Error" }
             },
 
             debugFields: {
