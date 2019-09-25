@@ -9,23 +9,28 @@ module.exports = {
 
             template: {
                 type: "string",                
-                default: '{ "status": "$status", "message": "$message", "code": "$code", "exception": "$exception" }'
+                default: '{ "status": "$status", "message": "$message", "code": "$code", "exception": "$exception" }',
+                description: "JSON structure error response template"
             },
 
             defaults: {
                 type: "object",
-                default: { status: "NOK", message: "Server Error" }
+                default: { status: "error", message: "Server Error" },
+                description: "JSON fields defaults dictionary"
             },
 
             debugFields: {
                 type: "array",
                 items: {
                     type: "string"
-                }
+                },
+                description: "Fields to filter out in response when LOG_LEVEL is not DEBUG"
             },
 
             messageField: {
-                type: "string"
+                type: "string",
+                default: "message",
+                description: "Field name where we expect the error message to be"
             },
             
             filters: {
@@ -37,16 +42,19 @@ module.exports = {
                             type: "string"
                         } 
                     }   
-                }  
+                },
+                description: "List of message regex rules, that match and transform error messages"
             },
  
             messages: {   
-                type: "object"                
+                type: "object",
+                description: "Message dictionary that maps proxied backend error messages to response curated messages"
             },
  
             restrictErrors: {  
                 type: "boolean", 
-                default: true
+                default: true,
+                description: "Every proxied error message not specified in `messages` option is filtered out"
             }
         }
     },
