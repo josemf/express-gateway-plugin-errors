@@ -1,6 +1,15 @@
 # express-gateway-plugin-errors
 An express gateway plugin and policy for error formatting and handling.
 
+## Why
+
+This plugin serves three different app development requirements that occur very often in API development and composition:
+
+* It's required every response from the gateway is in JSON format.
+* We need to format errors in a unified way, even if we're composing from different sets of API backends, that report errors in different formats.
+* Error messages should be enforced by the backend—in this scenario the app is dumb and just notifies whatever error message the API gateway sends.
+
+
 ## Installation
 
 Type from your shell environment:
@@ -10,14 +19,6 @@ eg plugin install express-gateway-plugin-errors
 ```
 
 A PR is pending approval in `express-gateway` that is required to enable all features for this plugin. So until it's approved you can install a custom `express-gateway` from my repo fork: https://github.com/josemf/express-gateway.
-
-## Why
-
-This plugin serves three different app development requirements that occur very often in API development and composition:
-
-* It's required every response from the gateway is in JSON format;
-* We need to format errors in a unified way, even if we're composing from different sets of API backends, that report errors in different formats 
-* Error messages should be enforced by the backend—in this scenario the app is dumb and just notifies whatever error message the API gateway sends.
 
 ## Quick start
 
@@ -50,9 +51,9 @@ This is done automatically for you if you used the command above.
 
 ### Configuration Parameters
 
-By default if no parameter have been declared, the plugin will enforce every response from the backend to be JSON format. By itself this might be useful if the app was built in a way that expects every response to be JSON.
+By default if no parameter have been declared, the plugin will make sure every response from the backend is in JSON. By itself this might be useful if the app was built in a way that expects every response to be JSON.
 
-Express gateway outputs most of this errors in `text/plain`. For example if we setup `key-auth` authorization and the app sends an invalid key token `express-gateway` will respond with:
+Express gateway outputs most of its internal errors in `text/plain`. For example if we setup `key-auth` authorization and the app sends an invalid key token, `express-gateway` will respond with:
 
 ```
 Unauthorized
@@ -62,14 +63,14 @@ Just by enabling the policy in some policy list will make `express-gateway` to r
 
 ```json
 {
-  "status": "NOK",
+  "status": "error",
   "message": "Unauthorized"
 }
 ```
 
 #### template:
 
-This makes possible to customize the response JSON structure `express-gateway` sends as a response. Example:
+This makes possible to customize the response JSON structure for errors. Example:
 
 ```yaml
 - errors:
@@ -77,7 +78,7 @@ This makes possible to customize the response JSON structure `express-gateway` s
     template: '{ "success": "$status", "message": "$message", "error": "$code", "exception": "$trace", "file": "$file", "line": "$line" }'
 ```
 
-In this example is it expected proxied backend to return something errors in the following structure:
+In this example it is expected proxied backend to return something errors in the following structure:
 
 ```json
 {
@@ -105,7 +106,7 @@ Having the template rule applied would result in this response:
 
 #### defaults:
 
-Some times it's possible the backend is not sending everything. For those cases we setup defaults:
+Some times it's possible the proxied backend is not sending some field in the template structure. For those cases we setup defaults:
 
 ```yaml
 defaults:
@@ -116,7 +117,7 @@ defaults:
 
 #### messageField:
 
-The JSON `message` is special. For example if the proxied backend sends `text/plain` we should know the field name to fill with its response content
+We always need a JSON `message` field. For example if the proxied backend sends `text/plain` we should know the field name to fill with its response content.
 
 ```yaml
 messageField: message
@@ -124,7 +125,7 @@ messageField: message
 
 #### debugFields:
 
-Some response fields can be showned depending on env `LOG_LEVEL=debug`:
+Some response fields can be showned or filtered out depending on env `LOG_LEVEL=debug`:
 
 ```yaml
 debugFields:
@@ -172,7 +173,7 @@ It will do regex capture and substitution with `$N` format.
 
 There are a few other things that depending on specific requirement needs I might have on the future or the demand this plugin might attract that I'm willing to pursue:
 
-* Error reporting to external proxied service endpoint
-* Converting errors to other formats
+* Error reporting to external proxied service endpoint.
+* Converting errors to other formats.
 
 Ofcourse any contribution is appreciated! 
