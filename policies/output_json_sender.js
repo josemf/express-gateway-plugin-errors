@@ -194,10 +194,16 @@ class OutputJsonSender {
     
     _jsonContent(data) {
 
-        if(!this._res.headersSent) {        
-            this._res.setHeader("Content-Type", "application/json");
-        }
+        try {
         
+            if(!this._res.headersSent) {        
+                this._res.setHeader("Content-Type", "application/json");
+            }
+            
+        } catch(e) {
+            // Noop--need to figure out this, some times it will crash for headers being sent 
+        }
+            
         return JSON.stringify(data);
     }
 }

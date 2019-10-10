@@ -1,6 +1,6 @@
 {
   "name": "express-gateway-plugin-errors",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "An express gateway plugin and policy for app error formatting and management",
   "main": "manifest.js",
   "scripts": {
